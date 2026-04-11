@@ -216,7 +216,7 @@ export async function parseFile(file: File): Promise<ParseResult> {
       const content = await decodeFileContent(file);
       return new Promise((resolve) => {
         Papa.parse(content, {
-          complete: (results) => {
+          complete: (results: Papa.ParseResult<unknown>) => {
             const data = results.data as (string | number | boolean)[][];
             if (data.length < 2) {
               resolve({ transactions: [], bankDetected: null, errors: ['CSV debe tener cabeceras y al menos una fila de datos'] });
@@ -231,7 +231,7 @@ export async function parseFile(file: File): Promise<ParseResult> {
               errors: transactions.length === 0 ? ['No se encontraron transacciones v\u00e1lidas en el CSV'] : [],
             });
           },
-          error: (error) => {
+          error: (error: Error) => {
             resolve({ transactions: [], bankDetected: null, errors: [`Error de parseo CSV: ${error.message}`] });
           },
           header: false,
