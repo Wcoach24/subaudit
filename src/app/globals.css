@@ -1,35 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #04060a;
+  --surface-primary: #0b0e14;
+  --surface-secondary: #12161e;
+  --accent: #00d2ff;
+  --success: #2ecc71;
+  --warning: #e67e22;
+  --error: #e74c3c;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0a0;
+}
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  @apply scroll-smooth;
+}
+
+html {
+  @apply scroll-smooth;
 }
 
 body {
-  background: #04060a;
-  color: #ffffff;
-  min-height: 100vh;
+  @apply bg-[#04060a] text-[#f0f0f0] antialiased;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0b0e14;
-}
-::-webkit-scrollbar-thumb {
-  background: #1a1f2e;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #00d2ff;
+.font-space-grotesk {
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
+.font-jetbrains-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, var(--accent), #0066cc, #00d2ff);
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes counterPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.counter-animate {
+  animation: counterPulse 2s ease-in-out;
+}
+
+.glow-accent {
+  text-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 210, 255, 0.3);
+}
+
+.surface-border {
+  @apply border border-[#12161e];
+}
+
+.cta-primary {
+  @apply bg-[#00d2ff] text-[#04060a] font-semibold py-3 px-6 rounded-lg transition-all;
+}
+.cta-primary:hover {
+  box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4);
+}
+
+.cta-secondary {
+  @apply border border-[#00d2ff] text-[#00d2ff] font-semibold py-3 px-6 rounded-lg transition-all hover:bg-[#00d2ff]/10;
+}
+
+.transition-smooth {
+  @apply transition-all duration-300 ease-out;
 }

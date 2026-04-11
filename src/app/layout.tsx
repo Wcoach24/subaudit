@@ -1,39 +1,54 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
-import './globals.css';
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-});
+import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SubAudit — Descubre las suscripciones que estás pagando sin saberlo',
-  description:
-    'Sube tu extracto bancario y descubre cuánto gastas en suscripciones. 100% privado, tus datos no salen de tu navegador. Gratis.',
-  keywords: ['suscripciones', 'auditoría', 'extracto bancario', 'ahorro', 'finanzas personales', 'España'],
+  title: 'SubAudit — Detecta suscripciones ocultas en tu extracto bancario',
+  description: 'Sube tu extracto bancario y descubre en 10 segundos todas las suscripciones que estás pagando. Análisis privado, sin registro, sin enviar tus datos a ningún servidor.',
   openGraph: {
-    title: 'SubAudit — ¿Cuánto pierdes en suscripciones que no usas?',
-    description: 'El español medio gasta 329€/mes en suscripciones. Descubre las tuyas en 10 segundos.',
+    title: 'SubAudit — Detecta suscripciones ocultas en tu extracto bancario',
+    description: 'Sube tu extracto bancario y descubre en 10 segundos todas las suscripciones que estás pagando.',
     type: 'website',
-    locale: 'es_ES',
+    url: 'https://subaudit.es',
+    siteName: 'SubAudit',
   },
-  robots: 'index, follow',
-};
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SubAudit — Detecta suscripciones ocultas en tu extracto bancario',
+    description: 'Sube tu extracto bancario y descubre en 10 segundos todas las suscripciones que estás pagando.',
+  },
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="es" className="dark">
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#04060a] text-white`}>
+    <html lang="es" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'SubAudit',
+              description: 'Detecta suscripciones ocultas en tu extracto bancario',
+              url: 'https://subaudit.es',
+              applicationCategory: 'FinanceApplication',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'EUR',
+                description: 'Análisis gratuito de suscripciones',
+              },
+            }),
+          }}
+        />
+      </head>
+      <body className="font-space-grotesk bg-[#04060a] text-[#f0f0f0]">
         {children}
       </body>
     </html>
-  );
+  )
 }
