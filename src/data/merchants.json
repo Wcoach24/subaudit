@@ -1,0 +1,302 @@
+[
+  {
+    "id": "netflix",
+    "name": "Netflix",
+    "patterns": ["NETFLIX", "NETFLIX.COM", "NETFLIX INTL", "NETFLIX.COM AMSTERDAM"],
+    "category": "streaming",
+    "typical_price_eur": [7.99, 12.99, 17.99],
+    "cancel_url": "https://www.netflix.com/cancelplan",
+    "cancel_steps_es": ["Entra en netflix.com e inicia sesi\u00f3n", "Ve a tu perfil \u2192 Cuenta", "Haz clic en 'Cancelar suscripci\u00f3n'", "Confirma la cancelaci\u00f3n"],
+    "trial_trap": false
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "patterns": ["SPOTIFY", "SPOTIFY.COM", "SPOTIFY AB"],
+    "category": "streaming",
+    "typical_price_eur": [9.99, 14.99],
+    "cancel_url": "https://www.spotify.com/account/cancel/",
+    "cancel_steps_es": ["Accede a tu cuenta en spotify.com", "Haz clic en tu perfil", "Selecciona 'Premium'", "Haz clic en 'Cambiar plan' y luego 'Gratis'"],
+    "trial_trap": true
+  },
+  {
+    "id": "hbo_max",
+    "name": "HBO Max",
+    "patterns": ["HBO", "HBOMAX", "MAX.COM", "HBO ESPA\u00d1A"],
+    "category": "streaming",
+    "typical_price_eur": [5.99, 10.99, 15.99],
+    "cancel_url": "https://www.hbomax.com/profile/manage",
+    "cancel_steps_es": ["Entra en hbomax.com con tu cuenta", "Ve a Configuraci\u00f3n \u2192 Suscripci\u00f3n", "Selecciona 'Cancelar suscripci\u00f3n'", "Elige la raz\u00f3n y confirma"],
+    "trial_trap": true
+  },
+  {
+    "id": "disney_plus",
+    "name": "Disney+",
+    "patterns": ["DISNEY", "DISNEY+", "DISNEYPLUS", "DISNEY PLUS"],
+    "category": "streaming",
+    "typical_price_eur": [7.99, 13.99],
+    "cancel_url": "https://www.disneyplus.com/account",
+    "cancel_steps_es": ["Accede a disneyplus.com", "Ve a tu cuenta", "Selecciona 'Gestionar suscripci\u00f3n'", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "amazon_prime",
+    "name": "Amazon Prime",
+    "patterns": ["AMAZON", "AMAZON PRIME", "AMAZON.COM", "AMAZON ESPA\u00d1A", "AMAZON PRIME VIDEO"],
+    "category": "streaming",
+    "typical_price_eur": [3.99, 49.00],
+    "cancel_url": "https://www.amazon.es/gp/subscription-manager",
+    "cancel_steps_es": ["Ve a amazon.es", "Accede a tu cuenta", "Busca 'Suscripciones' \u2192 Prime", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": false
+  },
+  {
+    "id": "apple_music",
+    "name": "Apple Music",
+    "patterns": ["APPLE MUSIC", "ITUNES"],
+    "category": "streaming",
+    "typical_price_eur": [10.99, 6.99],
+    "cancel_url": "https://support.apple.com/en-us/HT202039",
+    "cancel_steps_es": ["En dispositivo Apple, abre Configuraci\u00f3n", "Ve a tu nombre \u2192 Suscripciones", "Selecciona 'Apple Music'", "Toca 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "youtube_premium",
+    "name": "YouTube Premium",
+    "patterns": ["YOUTUBE", "YOUTUBE.COM", "YOUTUBE PREMIUM"],
+    "category": "streaming",
+    "typical_price_eur": [11.99, 6.99],
+    "cancel_url": "https://www.youtube.com/account/memberships",
+    "cancel_steps_es": ["Accede a youtube.com", "Ve a tu foto de perfil \u2192 Pagos y suscripciones", "Selecciona 'Gestionar suscripci\u00f3n'", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "dazn",
+    "name": "DAZN",
+    "patterns": ["DAZN", "DAZN.COM"],
+    "category": "streaming",
+    "typical_price_eur": [9.99, 19.99],
+    "cancel_url": "https://www.dazn.com/en/settings/account",
+    "cancel_steps_es": ["Entra en dazn.com", "Ve a Ajustes \u2192 Cuenta", "Selecciona 'Cancelar suscripci\u00f3n'", "Confirma la cancelaci\u00f3n"],
+    "trial_trap": false
+  },
+  {
+    "id": "crunchyroll",
+    "name": "Crunchyroll",
+    "patterns": ["CRUNCHYROLL", "CRUNCHYROLL.COM"],
+    "category": "streaming",
+    "typical_price_eur": [4.99, 14.99],
+    "cancel_url": "https://www.crunchyroll.com/settings/account",
+    "cancel_steps_es": ["Accede a crunchyroll.com", "Ve a tu cuenta \u2192 Configuraci\u00f3n", "Selecciona 'Plan'", "Haz clic en 'Cambiar plan'"],
+    "trial_trap": true
+  },
+  {
+    "id": "adobe_creative_cloud",
+    "name": "Adobe Creative Cloud",
+    "patterns": ["ADOBE", "ADOBE.COM", "ADOBE CREATIVE"],
+    "category": "ai_saas",
+    "typical_price_eur": [19.99, 49.99, 59.99],
+    "cancel_url": "https://account.adobe.com/plans",
+    "cancel_steps_es": ["Ve a account.adobe.com", "Haz clic en 'Planes y suscripciones'", "Selecciona tu plan", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "canva_pro",
+    "name": "Canva Pro",
+    "patterns": ["CANVA", "CANVA.COM", "CANVA PRO"],
+    "category": "productivity",
+    "typical_price_eur": [9.99, 119.99],
+    "cancel_url": "https://www.canva.com/settings/plan",
+    "cancel_steps_es": ["Accede a canva.com", "Ve a Configuraci\u00f3n \u2192 Plan", "Haz clic en 'Cambiar plan' \u2192 'Cambiar a Gratis'"],
+    "trial_trap": true
+  },
+  {
+    "id": "openai_chatgpt",
+    "name": "OpenAI ChatGPT Plus",
+    "patterns": ["OPENAI", "CHATGPT", "OPENAI.COM"],
+    "category": "ai_saas",
+    "typical_price_eur": [20.00],
+    "cancel_url": "https://platform.openai.com/account/billing/overview",
+    "cancel_steps_es": ["Ve a openai.com", "Haz clic en tu perfil", "Selecciona 'Billing overview'", "Ve a 'Subscriptions' y haz clic en 'Manage'"],
+    "trial_trap": false
+  },
+  {
+    "id": "midjourney",
+    "name": "Midjourney",
+    "patterns": ["MIDJOURNEY", "MIDJOURNEY.COM"],
+    "category": "ai_saas",
+    "typical_price_eur": [10.00, 30.00, 60.00],
+    "cancel_url": "https://www.midjourney.com/account/",
+    "cancel_steps_es": ["Accede a midjourney.com/account", "Ve a 'Billing'", "Haz clic en 'Manage Subscription'", "Selecciona 'Cancel Plan'"],
+    "trial_trap": false
+  },
+  {
+    "id": "claude_anthropic",
+    "name": "Claude Pro (Anthropic)",
+    "patterns": ["ANTHROPIC", "CLAUDE", "CLAUDE.AI"],
+    "category": "ai_saas",
+    "typical_price_eur": [20.00],
+    "cancel_url": "https://claude.ai/account",
+    "cancel_steps_es": ["Ve a claude.ai", "Accede a tu cuenta", "Ve a 'Settings' \u2192 'Billing'", "Haz clic en 'Cancel Claude Pro'"],
+    "trial_trap": false
+  },
+  {
+    "id": "github_copilot",
+    "name": "GitHub Copilot",
+    "patterns": ["GITHUB", "COPILOT", "GITHUB.COM"],
+    "category": "productivity",
+    "typical_price_eur": [10.00],
+    "cancel_url": "https://github.com/settings/billing",
+    "cancel_steps_es": ["Ve a github.com/settings/billing", "Selecciona 'Copilot'", "Haz clic en 'Cancel subscription'"],
+    "trial_trap": false
+  },
+  {
+    "id": "notion",
+    "name": "Notion",
+    "patterns": ["NOTION", "NOTION.SO"],
+    "category": "productivity",
+    "typical_price_eur": [10.00],
+    "cancel_url": "https://www.notion.so/settings/account",
+    "cancel_steps_es": ["Accede a notion.so", "Ve a 'Settings' \u2192 'Plan'", "Haz clic en 'Cancel plan'"],
+    "trial_trap": false
+  },
+  {
+    "id": "figma",
+    "name": "Figma",
+    "patterns": ["FIGMA", "FIGMA.COM"],
+    "category": "productivity",
+    "typical_price_eur": [12.00, 144.00],
+    "cancel_url": "https://www.figma.com/settings/billing",
+    "cancel_steps_es": ["Ve a figma.com/settings/billing", "Selecciona tu equipo", "Haz clic en 'Change plan'", "Elige 'Starter (gratis)'"],
+    "trial_trap": false
+  },
+  {
+    "id": "icloud",
+    "name": "iCloud+",
+    "patterns": ["ICLOUD", "ICLOUD.COM", "APPLE ICLOUD"],
+    "category": "cloud",
+    "typical_price_eur": [0.99, 2.99, 9.99],
+    "cancel_url": "https://support.apple.com/en-us/HT212515",
+    "cancel_steps_es": ["En dispositivo Apple, ve a Configuraci\u00f3n", "Haz clic en tu nombre", "Selecciona 'iCloud'", "Ve a 'Gestionar almacenamiento'"],
+    "trial_trap": false
+  },
+  {
+    "id": "google_one",
+    "name": "Google One",
+    "patterns": ["GOOGLE ONE"],
+    "category": "cloud",
+    "typical_price_eur": [1.99, 9.99, 19.99],
+    "cancel_url": "https://one.google.com/manage",
+    "cancel_steps_es": ["Ve a one.google.com/manage", "Ve a 'Configuraci\u00f3n de suscripci\u00f3n'", "Haz clic en 'Cancelar suscripci\u00f3n'", "Confirma"],
+    "trial_trap": false
+  },
+  {
+    "id": "dropbox",
+    "name": "Dropbox Plus",
+    "patterns": ["DROPBOX", "DROPBOX.COM"],
+    "category": "cloud",
+    "typical_price_eur": [9.99, 16.99],
+    "cancel_url": "https://www.dropbox.com/account/plans",
+    "cancel_steps_es": ["Accede a dropbox.com", "Ve a tu cuenta \u2192 Planes", "Selecciona 'Cambiar plan'", "Elige 'Gratis'"],
+    "trial_trap": false
+  },
+  {
+    "id": "strava",
+    "name": "Strava",
+    "patterns": ["STRAVA", "STRAVA.COM"],
+    "category": "fitness",
+    "typical_price_eur": [6.99, 83.99],
+    "cancel_url": "https://www.strava.com/settings/subscription",
+    "cancel_steps_es": ["Ve a strava.com/settings/subscription", "Haz clic en 'Manage Subscription'", "Selecciona 'Cancel'"],
+    "trial_trap": false
+  },
+  {
+    "id": "calm",
+    "name": "Calm",
+    "patterns": ["CALM", "CALM.COM"],
+    "category": "fitness",
+    "typical_price_eur": [14.99, 69.99],
+    "cancel_url": "https://www.calm.com/account",
+    "cancel_steps_es": ["Accede a calm.com", "Ve a tu cuenta \u2192 Suscripci\u00f3n", "Haz clic en 'Manage subscription'", "Selecciona 'Cancel'"],
+    "trial_trap": true
+  },
+  {
+    "id": "playstation_plus",
+    "name": "PlayStation Plus",
+    "patterns": ["PLAYSTATION", "PS PLUS", "SONY PLAYSTATION"],
+    "category": "gaming",
+    "typical_price_eur": [8.99, 13.99, 17.99],
+    "cancel_url": "https://www.playstation.com/account/subscriptions",
+    "cancel_steps_es": ["Ve a tu perfil de PlayStation", "Selecciona 'Cuenta' \u2192 'Servicios y suscripciones'", "Haz clic en 'PlayStation Plus'", "Selecciona 'Cancelar'"],
+    "trial_trap": false
+  },
+  {
+    "id": "xbox_gamepass",
+    "name": "Xbox Game Pass",
+    "patterns": ["XBOX", "GAME PASS", "MICROSOFT XBOX"],
+    "category": "gaming",
+    "typical_price_eur": [9.99, 16.99],
+    "cancel_url": "https://account.microsoft.com/subscription",
+    "cancel_steps_es": ["Ve a account.microsoft.com", "Selecciona 'Suscripciones' \u2192 'Game Pass'", "Haz clic en 'Gestionar suscripci\u00f3n'", "Selecciona 'Cancelar'"],
+    "trial_trap": true
+  },
+  {
+    "id": "uber_one",
+    "name": "Uber One",
+    "patterns": ["UBER", "UBER ONE", "UBER.COM"],
+    "category": "delivery",
+    "typical_price_eur": [0.99, 9.99],
+    "cancel_url": "https://www.uber.com/account",
+    "cancel_steps_es": ["Abre la app o ve a uber.com", "Ve a tu cuenta", "Selecciona 'Uber One'", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "glovo_prime",
+    "name": "Glovo Prime",
+    "patterns": ["GLOVO", "GLOVO.COM"],
+    "category": "delivery",
+    "typical_price_eur": [9.99, 14.99],
+    "cancel_url": "https://www.glovo.com/account",
+    "cancel_steps_es": ["Accede a glovo.com o a la app", "Ve a tu perfil", "Selecciona 'Glovo Prime'", "Haz clic en 'Cancelar suscripci\u00f3n'"],
+    "trial_trap": true
+  },
+  {
+    "id": "revolut_premium",
+    "name": "Revolut Premium",
+    "patterns": ["REVOLUT", "REVOLUT.COM"],
+    "category": "fintech",
+    "typical_price_eur": [9.99],
+    "cancel_url": "https://app.revolut.com/settings/subscription",
+    "cancel_steps_es": ["Abre la app de Revolut", "Ve a 'Configuraci\u00f3n' \u2192 'Planes'", "Selecciona tu plan", "Haz clic en 'Cancelar'"],
+    "trial_trap": false
+  },
+  {
+    "id": "typeform",
+    "name": "Typeform",
+    "patterns": ["TYPEFORM", "TYPEFORM.COM", "TYPEFORM SL"],
+    "category": "productivity",
+    "typical_price_eur": [25.00, 50.00],
+    "cancel_url": "https://admin.typeform.com/account",
+    "cancel_steps_es": ["Ve a admin.typeform.com", "Haz clic en tu nombre", "Selecciona 'Billing'", "Haz clic en 'Cancel subscription'"],
+    "trial_trap": false
+  },
+  {
+    "id": "mailchimp",
+    "name": "Mailchimp",
+    "patterns": ["MAILCHIMP", "MAILCHIMP.COM"],
+    "category": "productivity",
+    "typical_price_eur": [20.00, 50.00],
+    "cancel_url": "https://mailchimp.com/account/billing/",
+    "cancel_steps_es": ["Ve a mailchimp.com", "Haz clic en tu perfil", "Selecciona 'Billing'", "Haz clic en 'Cancel plan'"],
+    "trial_trap": false
+  },
+  {
+    "id": "grammarly",
+    "name": "Grammarly Premium",
+    "patterns": ["GRAMMARLY", "GRAMMARLY.COM"],
+    "category": "productivity",
+    "typical_price_eur": [12.00, 144.00],
+    "cancel_url": "https://www.grammarly.com/subscription",
+    "cancel_steps_es": ["Ve a grammarly.com/subscription", "Haz clic en 'Manage plan'", "Selecciona 'Cancel subscription'", "Confirma"],
+    "trial_trap": true
+  }
+]

@@ -1,130 +1,173 @@
-import { Transaction } from './parser';
-import { findMerchant, categoryLabels, Merchant } from './merchants';
+import merchantsData from '../data/merchants.json';
 
-export interface Subscription {
+export type { Transaction } from './parser';
+import type { Transaction } from './parser';
+
+interface MerchantRecord {
+  id: string;
+  name: string;
+  patterns: string[];
+  category: string;
+  typical_price_eur: number[];
+  cancel_url: string;
+  cancel_steps_es: string[];
+  trial_trap: boolean;
+}
+
+export interface DetectedSubscription {
+  id: string;
   merchantId: string | null;
   merchantName: string;
   category: string;
-  categoryLabel: string;
   amount: number;
   frequency: 'monthly' | 'annual' | 'weekly' | 'unknown';
-  frequencyLabel: string;
-  charges: Transaction[];
-  firstCharge: Date;
-  lastCharge: Date;
-  monthsActive: number;
+  firstSeen: Date;
+  lastSeen: Date;
+  occurrences: number;
   cancelUrl: string | null;
-  cancelSteps: string[] | null;
-  domain: string | null;
+  cancelSteps: string[];
+  faviconUrl: string;
+  confidence: number;
 }
 
 export interface AuditResult {
-  subscriptions: Subscription[];
+  subscriptions: DetectedSubscription[];
   totalMonthly: number;
   totalAnnual: number;
-  totalCount: number;
+  transactionCount: number;
 }
 
-const freqLabels: Record<string, string> = {
-  monthly: 'Mensual', annual: 'Anual', weekly: 'Semanal', unknown: 'Desconocida',
-};
+const merchants = merchantsData as MerchantRecord[];
 
-function fuzzyGroupKey(concept: string): string {
-  return concept.toLowerCase().replace(/[^a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1\u00fc\s]/g, '').replace(/\s+/g, '').trim().slice(0, 20);
-}
-
-function groupByMerchant(txs: Transaction[]): Array<{ merchant: Merchant | null; transactions: Transaction[] }> {
-  const map = new Map<string, { merchant: Merchant | null; transactions: Transaction[] }>();
-  for (const tx of txs) {
-    if (tx.amount >= 0) continue;
-    const m = findMerchant(tx.concept);
-    const key = m ? `k_${m.id}` : `u_${fuzzyGroupKey(tx.concept)}`;
-    if (!map.has(key)) map.set(key, { merchant: m, transactions: [] });
-    map.get(key)!.transactions.push(tx);
+function matchMerchant(concept: string): MerchantRecord | null {
+  const upper = concept.toUpperCase();
+  for (const m of merchants) {
+    for (const pattern of m.patterns) {
+      if (upper.includes(pattern.toUpperCase())) return m;
+    }
   }
-  return Array.from(map.values());
+  return null;
 }
 
-function intervalDays(d1: Date, d2: Date): number {
-  return Math.round(Math.abs(d2.getTime() - d1.getTime()) / 86400000);
+function normalizeConcept(concept: string): string {
+  return concept.toUpperCase().replace(/\d{2,}/g, '').replace(/[^A-Z\u00c1\u00c9\u00cd\u00d3\u00da\u00d1\s]/g, '').replace(/\s+/g, ' ').trim();
 }
 
-function detectFreq(sorted: Transaction[]): 'monthly' | 'annual' | 'weekly' | 'unknown' {
-  if (sorted.length < 2) return 'unknown';
+function amountsSimilar(a: number, b: number): boolean {
+  if (a === 0 || b === 0) return false;
+  return Math.abs(a - b) / Math.max(a, b) <= 0.05;
+}
+
+function detectFrequency(dates: Date[]): 'monthly' | 'annual' | 'weekly' | 'unknown' {
+  if (dates.length < 2) return 'unknown';
+  const sorted = [...dates].sort((a, b) => a.getTime() - b.getTime());
   const intervals: number[] = [];
-  for (let i = 1; i < sorted.length; i++) intervals.push(intervalDays(sorted[i - 1].date, sorted[i].date));
+  for (let i = 1; i < sorted.length; i++) {
+    intervals.push(Math.round((sorted[i].getTime() - sorted[i - 1].getTime()) / (1000 * 60 * 60 * 24)));
+  }
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-  if (avg >= 28 && avg <= 35) return 'monthly';
-  if (avg >= 358 && avg <= 372) return 'annual';
   if (avg >= 6 && avg <= 8) return 'weekly';
+  if (avg >= 25 && avg <= 35) return 'monthly';
+  if (avg >= 350 && avg <= 380) return 'annual';
   return 'unknown';
 }
 
-function amountsSimilar(amounts: number[], tol = 0.05): boolean {
-  if (amounts.length < 2) return true;
-  const avg = amounts.reduce((a, b) => a + b, 0) / amounts.length;
-  return amounts.every((a) => Math.abs(a - avg) / avg <= tol);
-}
-
-function regularIntervals(sorted: Transaction[]): boolean {
-  if (sorted.length < 2) return false;
+function intervalsRegular(dates: Date[]): boolean {
+  if (dates.length < 2) return false;
+  const sorted = [...dates].sort((a, b) => a.getTime() - b.getTime());
   const intervals: number[] = [];
-  for (let i = 1; i < sorted.length; i++) intervals.push(intervalDays(sorted[i - 1].date, sorted[i].date));
+  for (let i = 1; i < sorted.length; i++) {
+    intervals.push(Math.round((sorted[i].getTime() - sorted[i - 1].getTime()) / (1000 * 60 * 60 * 24)));
+  }
+  if (intervals.length === 0) return false;
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-  return (avg >= 6 && avg <= 8) || (avg >= 28 && avg <= 35) || (avg >= 358 && avg <= 372);
-}
-
-function isSubscription(txs: Transaction[], known: boolean): boolean {
-  if (txs.length < 2) return false;
-  const sorted = [...txs].sort((a, b) => a.date.getTime() - b.date.getTime());
-  const amounts = sorted.map((t) => Math.abs(t.amount));
-  const signals = [amountsSimilar(amounts), regularIntervals(sorted), known].filter(Boolean).length;
-  return signals >= 2;
-}
-
-function getDomain(m: Merchant | null): string | null {
-  if (!m?.cancelUrl) return null;
-  try { return new URL(m.cancelUrl).hostname.replace('www.', ''); } catch { return null; }
+  const variance = intervals.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / intervals.length;
+  return Math.sqrt(variance) <= Math.max(5, avg * 0.15);
 }
 
 export function detectSubscriptions(transactions: Transaction[]): AuditResult {
-  const groups = groupByMerchant(transactions);
-  const subs: Subscription[] = [];
+  const debits = transactions.filter((t) => t.type === 'cargo' && t.amount > 0);
 
-  for (const group of groups) {
-    const { merchant, transactions: txs } = group;
+  interface TxGroup {
+    merchantRecord: MerchantRecord | null;
+    key: string;
+    transactions: Transaction[];
+  }
+
+  const groups = new Map<string, TxGroup>();
+
+  for (const tx of debits) {
+    const merchant = matchMerchant(tx.concept);
+    const key = merchant ? `merchant:${merchant.id}` : `unknown:${normalizeConcept(tx.concept)}`;
+    if (!groups.has(key)) {
+      groups.set(key, { merchantRecord: merchant, key, transactions: [] });
+    }
+    groups.get(key)!.transactions.push(tx);
+  }
+
+  const subscriptions: DetectedSubscription[] = [];
+
+  for (const [, group] of groups) {
+    const txs = group.transactions;
     if (txs.length < 2) continue;
-    if (!isSubscription(txs, merchant !== null)) continue;
 
-    const sorted = [...txs].sort((a, b) => a.date.getTime() - b.date.getTime());
-    const freq = detectFreq(sorted);
-    const amounts = sorted.map((t) => Math.abs(t.amount));
-    const avg = amounts.reduce((a, b) => a + b, 0) / amounts.length;
-    const monthly = freq === 'annual' ? avg / 12 : avg;
-    const first = sorted[0].date;
-    const last = sorted[sorted.length - 1].date;
-    const months = Math.max(1, (last.getFullYear() - first.getFullYear()) * 12 + (last.getMonth() - first.getMonth()));
-    const cat = merchant?.category || 'other';
+    const sameMerchant = true;
+    const amounts = txs.map((t) => t.amount);
+    const medianAmount = amounts.sort((a, b) => a - b)[Math.floor(amounts.length / 2)];
+    const similarAmounts = txs.filter((t) => amountsSimilar(t.amount, medianAmount)).length;
+    const amountSignal = similarAmounts / txs.length >= 0.7;
+    const dates = txs.map((t) => t.date);
+    const regularInterval = intervalsRegular(dates);
 
-    subs.push({
+    const signals = [sameMerchant, amountSignal, regularInterval].filter(Boolean).length;
+    if (signals < 2) continue;
+
+    const frequency = detectFrequency(dates);
+    const sortedDates = [...dates].sort((a, b) => a.getTime() - b.getTime());
+    const merchant = group.merchantRecord;
+    const merchantName = merchant ? merchant.name : normalizeConcept(txs[0].concept) || txs[0].concept;
+
+    let faviconUrl = '';
+    if (merchant?.cancel_url) {
+      try {
+        const domain = new URL(merchant.cancel_url).hostname;
+        faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      } catch { faviconUrl = ''; }
+    }
+
+    subscriptions.push({
+      id: merchant?.id || `unknown-${subscriptions.length}`,
       merchantId: merchant?.id || null,
-      merchantName: merchant?.name || sorted[0].concept.slice(0, 30),
-      category: cat,
-      categoryLabel: categoryLabels[cat] || 'Otros',
-      amount: Math.round(monthly * 100) / 100,
-      frequency: freq,
-      frequencyLabel: freqLabels[freq],
-      charges: sorted,
-      firstCharge: first,
-      lastCharge: last,
-      monthsActive: months,
-      cancelUrl: merchant?.cancelUrl || null,
-      cancelSteps: merchant?.cancelStepsEs || null,
-      domain: getDomain(merchant),
+      merchantName,
+      category: merchant?.category || 'other',
+      amount: medianAmount,
+      frequency: frequency !== 'unknown' ? frequency : 'monthly',
+      firstSeen: sortedDates[0],
+      lastSeen: sortedDates[sortedDates.length - 1],
+      occurrences: txs.length,
+      cancelUrl: merchant?.cancel_url || null,
+      cancelSteps: merchant?.cancel_steps_es || [],
+      faviconUrl,
+      confidence: Math.min(1, signals / 3 + (txs.length > 3 ? 0.1 : 0)),
     });
   }
 
-  subs.sort((a, b) => b.amount - a.amount);
-  const totalMonthly = Math.round(subs.reduce((s, sub) => s + sub.amount, 0) * 100) / 100;
-  return { subscriptions: subs, totalMonthly, totalAnnual: Math.round(totalMonthly * 12 * 100) / 100, totalCount: subs.length };
+  subscriptions.sort((a, b) => b.amount - a.amount);
+
+  let totalMonthly = 0;
+  for (const sub of subscriptions) {
+    switch (sub.frequency) {
+      case 'monthly': totalMonthly += sub.amount; break;
+      case 'annual': totalMonthly += sub.amount / 12; break;
+      case 'weekly': totalMonthly += sub.amount * 4.33; break;
+      default: totalMonthly += sub.amount;
+    }
+  }
+
+  return {
+    subscriptions,
+    totalMonthly: Math.round(totalMonthly * 100) / 100,
+    totalAnnual: Math.round(totalMonthly * 12 * 100) / 100,
+    transactionCount: transactions.length,
+  };
 }
